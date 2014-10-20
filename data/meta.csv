@@ -1,0 +1,29 @@
+VARIABLE,VARIABLE_TITLE,TYPE,TRANSFORM,SCALE,SOFI,SOURCE
+ADESA,Average dietary energy supply adequacy,positive,,1,TRUE,raw
+BY.GDP.MKTP.PCAP,GDP per capita,positive,log,1,FALSE,constructed
+DFPLI.IN.NO,Domestic food price level index,positive,,1,TRUE,raw
+DFPLIV.IN.NO,Domestic food price level index volatility,positive,log,1,TRUE,raw
+EN.POP.DNST,Population density,positive,log,1,FALSE,raw
+FB.FS.CRLS.KCD.NO,"Food supply, cereals - excluding beer (kcal/cap/day)",positive,,1,TRUE,raw
+FB.PSQ.AO.GCD.NO,Protein of animal origin (g/cap/day),positive,,1,TRUE,raw
+FB.PSQ.GT.GCD.NO,"Protein supply quantity, grand total (g/cap/day)",positive,,1,TRUE,raw
+IS.ROD.DNST.K2,Road density (km of road per 100 sq. km of land area),proportion,logit,100,TRUE,raw
+IS.RRS.DNST.K2,Rail lines density (total route in km per 100 square km of land area),proportion,logit,100,TRUE,raw
+NY.GDP.MKTP.CD,GDP (current US$),positive,log,1,FALSE,raw
+PCFPV.IN.NO,Per capita food production variability (constant 2004-2006 I$),positive,log,1,TRUE,raw
+POPULATION,Total population,positive,log,1,TRUE,raw
+POU,Prevalence of undernourishment,proportion,logit,1,TRUE,raw
+QV.NPV.FOOD.ID.NO,Food net production value (constant 2004-2006 I$),positive,log,1,TRUE,raw
+RL.AREA.EQIRR.HA.SHL,"Area equipped for irrigation, share of total arable land (percent)",proportion,logit,100,TRUE,raw
+SFEP.NO,Share of food expenditure of the poor (percent),proportion,logit,100,TRUE,raw
+SH.H2O.SAFE.ZS,Improved water source (share of population with access),proportion,logit,100,TRUE,raw
+SH.STA.ACSN,Improved sanitation facilities (share of population with access),proportion,logit,100,TRUE,raw
+SH.STA.MALN.ZS,Percentage of children under 5 years of age who are underweight (percent),proportion,logit,100,TRUE,raw
+SH.STA.STNT.ZS,Percentage of children under 5 years of age who are stunted (percent),proportion,logit,100,TRUE,raw
+SH.STA.WAST.ZS,Percentage of children under 5 years of age affected by wasting (percent),proportion,logit,100,TRUE,raw
+SI.POV.DDAY,Poverty headcount ratio at $1.25 per day,proportion,logit,100,FALSE,raw
+SI.POV.GINI,Gini Index,proportion,logit,100,FALSE,raw
+SI.POV.NAHC,Poverty headcount ratio at national poverty line,proportion,logit,100,FALSE,raw
+SI.POV.RUHC,Poverty headcount ratio at rural poverty line,proportion,logit,100,FALSE,raw
+SP.RUR.TOTL.ZS,Rural population percentage,proportion,logit,100,FALSE,raw
+TI.IV.FEFTMT.USD.NO,Value of food imports over total merchandise exports (percent),positive,log,1,TRUE,raw
