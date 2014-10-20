@@ -1,3 +1,6 @@
+library(data.table)
+library(igraph)
+
 load("../imputed.RData")
 
 
@@ -36,7 +39,6 @@ filtered.dt = sorted.dt[!duplicated(sorted.dt$FAOST_CODE), ]
 neighbour.dt = filtered.dt[1:15, ]
 
 
-library(igraph)
 test.df = data.frame(from = rep(paste0(neighbour.dt[1, FAO_TABLE_NAME], "\n(", neighbour.dt[1, Year], ")"), NROW(neighbour.dt) - 1), to = paste0(neighbour.dt[-1, FAO_TABLE_NAME], "\n(", neighbour.dt[-1, Year], ")"), dist = neighbour.dt[-1, distFromIndex])
 test.graph = graph.data.frame(d = test.df)
 
