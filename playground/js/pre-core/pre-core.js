@@ -27,8 +27,11 @@ define(['jquery',
             subtitle: translate.pre_description,
             toggle_navigation: translate.toggle_navigation,
             engine: translate.engine,
+            engine_link: '#/engine/' + this.CONFIG.lang,
             papers: translate.papers,
+            papers_link: '#/paper/' + this.CONFIG.lang,
             competition: translate.competition,
+            competition_link: '#/competition/' + this.CONFIG.lang,
             signin: translate.signin
         };
         var render = Mustache.render(template, view);
