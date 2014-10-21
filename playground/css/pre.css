@@ -1,0 +1,12 @@
+.bs-docs-header {
+    top: 32px;
+}
+
+.bs-docs-masthead, .bs-docs-header {
+    background-image: none;
+    background-color: #379BCE;
+}
+
+.container p {
+    color: #FFFFFF;
+}
