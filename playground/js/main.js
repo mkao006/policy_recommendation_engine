@@ -34,36 +34,37 @@ require(['jquery',
          'bootstrap',
          'domReady!'], function($, Mustache, Backbone) {
 
-    var ApplicationRouter = Backbone.Router.extend({
+    /* Define the router. */
+    var AppRouter = Backbone.Router.extend({
 
-        isRendered: false,
-
-        initialize: function (options) {
-            Backbone.history.start();
-        },
-
+        /* Define the routes. */
         routes: {
-            '': 'home',
-            '(/)home(/)': 'home',
-            '(/)home(/):lang': 'home'
+            ''                  :   'home',
+            '(/)home(/)'        :   'home',
+            '(/)home(/):lang'   :   'home'
         },
 
-        home: function (lang) {
-            this.init_language(lang);
-            require(['pre_core'], function(PRE_CORE) {
-                PRE_CORE.init({lang: lang});
-            });
-        },
-
+        /* Overwrite language settings. */
         init_language: function (lang) {
-            require.config({
-                'locale': lang,
-                'placeholder_id': 'placeholder'
-            });
+            lang = (lang != null) ? lang : 'en';
+            console.debug(lang);
+            require.config({'locale': lang});
         }
 
     });
 
-    new ApplicationRouter();
+    /* Initiate router. */
+    var app_router = new AppRouter;
+
+    /* Define routes endpoints. */
+    app_router.on('route:home', function (lang) {
+        this.init_language(lang);
+        require(['pre_core'], function(PRE_CORE) {
+            PRE_CORE.init({lang: lang});
+        });
+    });
+
+    /* Initiate Backbone history. */
+    Backbone.history.start();
 
 });

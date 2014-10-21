@@ -22,7 +22,10 @@ define(['jquery',
 
         /* Render the main structure. */
         var template = $(templates).filter('#main_structure').html();
-        var view = {};
+        var view = {
+            title: translate.pre,
+            subtitle: translate.pre_description
+        };
         var render = Mustache.render(template, view);
         $('#' + this.CONFIG.placeholder_id).html(render);
 
