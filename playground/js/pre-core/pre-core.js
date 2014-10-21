@@ -24,7 +24,12 @@ define(['jquery',
         var template = $(templates).filter('#main_structure').html();
         var view = {
             title: translate.pre,
-            subtitle: translate.pre_description
+            subtitle: translate.pre_description,
+            toggle_navigation: translate.toggle_navigation,
+            engine: translate.engine,
+            papers: translate.papers,
+            competition: translate.competition,
+            signin: translate.signin
         };
         var render = Mustache.render(template, view);
         $('#' + this.CONFIG.placeholder_id).html(render);
