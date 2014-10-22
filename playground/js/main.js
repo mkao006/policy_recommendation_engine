@@ -3,13 +3,6 @@ require.config({
     baseUrl: 'js/libs',
 
     paths: {
-        bootstrap       :   '//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min',
-        backbone        :   '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min',
-        chosen          :   '//fenixapps.fao.org/repository/js/chosen/1.0.0/chosen.jquery.min',
-        highcharts      :   '//code.highcharts.com/highcharts',
-        jquery          :   '//code.jquery.com/jquery-1.10.1.min',
-        mustache        :   '//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache',
-        underscore      :   '//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min',
         pre_core        :   '../pre-core/pre-core'
     },
 
@@ -47,7 +40,6 @@ require(['jquery',
         /* Overwrite language settings. */
         init_language: function (lang) {
             lang = (lang != null) ? lang : 'en';
-            console.debug(lang);
             require.config({'locale': lang});
         }
 
