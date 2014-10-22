@@ -3,7 +3,8 @@ require.config({
     baseUrl: 'js/libs',
 
     paths: {
-        pre_core        :   '../pre-core/pre-core'
+        pre_core        :   '../pre-core/pre-core',
+        pre_engine      :   '../pre-engine/pre-engine'
     },
 
     shim: {
@@ -34,7 +35,9 @@ require(['jquery',
         routes: {
             ''                  :   'home',
             '(/)home(/)'        :   'home',
-            '(/)home(/):lang'   :   'home'
+            '(/)home(/):lang'   :   'home',
+            '(/)engine(/)'      :   'engine',
+            '(/)engine(/):lang' :   'engine'
         },
 
         /* Overwrite language settings. */
@@ -48,11 +51,31 @@ require(['jquery',
     /* Initiate router. */
     var app_router = new AppRouter;
 
-    /* Define routes endpoints. */
+    /* Define routes endpoints: home. */
     app_router.on('route:home', function (lang) {
         this.init_language(lang);
         require(['pre_core'], function(PRE_CORE) {
-            PRE_CORE.init({lang: lang});
+            PRE_CORE.init({
+                lang: lang,
+                placeholder_id: 'placeholder'
+            });
+        });
+    });
+
+    /* Define routes endpoints: engine. */
+    app_router.on('route:engine', function (lang) {
+        this.init_language(lang);
+        require(['pre_core'], function(PRE_CORE) {
+            PRE_CORE.init({
+                lang: lang,
+                placeholder_id: 'placeholder'
+            });
+            require(['pre_engine'], function(PRE_ENGINE) {
+                PRE_ENGINE.init({
+                    lang: lang,
+                    placeholder_id: 'main_content'
+                });
+            });
         });
     });
 

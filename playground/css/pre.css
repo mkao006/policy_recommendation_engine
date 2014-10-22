@@ -1,12 +1,28 @@
-.bs-docs-header {
-    top: 32px;
-}
+.link {
+  fill: none;
+  stroke: #ccc;
+  opacity: 0.45;
+  stroke-width: 1.5px; }
+
+.node circle {
+  stroke: #fff;
+  opacity: 0.9;
+  stroke-width: 1.5px; }
+
+.node:not(:hover) .nodetext {
+  display: none; }
+
+text {
+  font: 8px serif;
+  opacity: 0.9;
+  pointer-events: none; }
 
 .bs-docs-masthead, .bs-docs-header {
-    background-image: none;
-    background-color: #379BCE;
-}
+  background-color: #379bce;
+  background-image: none; }
+
+.bs-docs-header {
+  top: 32px; }
 
 .container p {
-    color: #FFFFFF;
-}
+  color: #FFFFFF; }
