@@ -5,9 +5,14 @@ load("../data/imputed.RData")
 
 
 imputed.dt = na.omit(imputed.dt)
+variableIndex = which(!grepl("_", colnames(imputed.dt)))
+imputed.dt[, Year := (Year - min(Year))/max((Year - min(Year)))]
+
 ## Should change this to rank
-imputed.dt[, `:=`(colnames(imputed.dt)[-c(1, 29)],
-                  lapply(imputed.dt[, 3:ncol(imputed.dt), with = FALSE],
+imputed.dt[, `:=`(colnames(imputed.dt)[variableIndex],
+                  lapply(imputed.dt[,
+                                    colnames(imputed.dt)[variableIndex],
+                                    with = FALSE],
                          FUN = function(x){
                              if(is.numeric(x)){
                                  scaled = x/max(x, na.rm = TRUE)
@@ -30,20 +35,26 @@ dist2index = function(data, names, index){
     rowSums(mapply(x = all, FUN = function(x, y) abs(x - y), y = one))
 }
 
+
 dist.lst =
     lapply(1:NROW(imputed.dt),
            FUN = function(x){
                print(x)
                dist =
-                   dist2index(imputed.dt, colnames(imputed.dt)[2:28], x)
+                   dist2index(imputed.dt,
+                              colnames(imputed.dt)[variableIndex], x)
                fromCountry = imputed.dt[x, FAO_TABLE_NAME]
+               fromCountryCode = imputed.dt[x, FAOST_CODE]
                toCountry = imputed.dt[, FAO_TABLE_NAME]
+               toCountryCode = imputed.dt[, FAOST_CODE]
                fromYear = imputed.dt[x, Year]
                toYear = imputed.dt[, Year]
                fullConnect = 
                    data.table(fromCountry = fromCountry,
+                              fromCountryCode = fromCountryCode,
                               fromYear = fromYear,
                               toCountry = toCountry,
+                              toCountryCode = toCountryCode,
                               toYear = toYear,
                               distance = dist)
                fullConnect =
@@ -57,14 +68,173 @@ dist.lst =
            )
 
 fullNetwork = Reduce(rbind, dist.lst)
+node.dt =
+    data.table(name = unique(fullNetwork$fromCountry),
+               id = 0:(length(unique(fullNetwork$fromCountry)) - 1))
+setnames(node.dt, c("name", "id"), c("fromCountry", "fromID"))
+fullNetwork = merge(fullNetwork, node.dt, by = "fromCountry")
+setnames(node.dt, c("fromCountry", "fromID"), c("toCountry", "toID"))
+fullNetwork = merge(fullNetwork, node.dt, by = "toCountry")
+
+write.csv(fullNetwork, file = "../data/fullNetwork.csv",
+          row.names = FALSE)
+write.csv(imputed.dt, file = "../data/imputed.csv",
+          row.names = FALSE)
+
+fullNetwork = read.csv(file = "../data/fullNetwork.csv")
+library(RPostgreSQL)
+drv = dbDriver("PostgreSQL")
+con = dbConnect(drv, user = "mk", dbname = "fullNetwork")
+dbExistsTable(con, "full_network")
+dbWriteTable(con, name = "full_network", value = fullNetwork,
+             overwrite = TRUE)
+dbGetQuery(con, 'SELECT * FROM full_network LIMIT 10')
+
+
+
+getSubYearNetwork = function(network, year){
+    network[fromYear == year & toYear == year &
+            fromCountry != toCountry, ]
+}
+
+library(data.table)
+network2010 = getSubYearNetwork(data.table(fullNetwork), 1)
+
+tmp = by(network2010, INDICES = network2010$fromCountry,
+    FUN = function(x) head(x[order(distance, decreasing = FALSE)], 2))
+
+edge2010 = Reduce(function(x, y) rbind(x, y), tmp)
+
+## edge2010 = network2010[distance < 0.8 & distance > 0, ]
+node2010 =
+    unique.data.frame(network2010[, list(name = fromCountry,
+                                         id = fromCountryCode)])
+library(FAOSTAT)
+node2010 =
+    merge(data.frame(node2010),
+          FAOregionProfile[, c("FAOST_CODE", "UNSD_MACRO_REG",
+                               "UNSD_SUB_REG")],
+          by.x = "id", by.y = "FAOST_CODE")
+
+
+
+
+
+library(d3Network)
+d3ForceNetwork(Links = data.frame(edge2010),
+               Nodes = node2010,
+               Source = "fromID", Target = "toID",
+               Value = "distance", NodeID = "name",
+               Group = "UNSD_MACRO_REG", zoom = TRUE,
+               opacity = 0.9, fontsize = 15,
+               linkDistance = "function(d){return d.value*000}",
+               width = 1500, height = 1500, charge = -300,
+               file = "network2010.html")
+
+## Network for 1995
+network1995 = getSubYearNetwork(data.table(fullNetwork), 0)
+
+tmp = by(network1995, INDICES = network1995$fromCountry,
+    FUN = function(x) head(x[order(distance, decreasing = FALSE)], 2))
+
+edge1995 = Reduce(function(x, y) rbind(x, y), tmp)
+
+## edge1995 = network1995[distance < 0.8 & distance > 0, ]
+node1995 =
+    unique.data.frame(network1995[, list(name = fromCountry,
+                                         id = fromCountryCode)])
+
+node1995 =
+    merge(data.frame(node1995),
+          FAOregionProfile[, c("FAOST_CODE", "UNSD_MACRO_REG",
+                               "UNSD_SUB_REG")],
+          by.x = "id", by.y = "FAOST_CODE")
+
+d3ForceNetwork(Links = data.frame(edge1995),
+               Nodes = node2010,
+               Source = "fromID", Target = "toID",
+               Value = "distance", NodeID = "name",
+               Group = "UNSD_MACRO_REG", zoom = TRUE,
+               opacity = 0.9, fontsize = 15,
+               linkDistance = "function(d){return d.value*000}",
+               width = 1500, height = 1500, charge = -300,
+               file = "network1995.html")
+
+
+
+## Network for 2000
+network2000 = getSubYearNetwork(data.table(fullNetwork), 1/3)
+
+tmp = by(network2000, INDICES = network2000$fromCountry,
+    FUN = function(x) head(x[order(distance, decreasing = FALSE)], 2))
+
+edge2000 = Reduce(function(x, y) rbind(x, y), tmp)
+
+## edge2000 = network2000[distance < 0.8 & distance > 0, ]
+node2000 =
+    unique.data.frame(network2000[, list(name = fromCountry,
+                                         id = fromCountryCode)])
+
+node2000 =
+    merge(data.frame(node2000),
+          FAOregionProfile[, c("FAOST_CODE", "UNSD_MACRO_REG",
+                               "UNSD_SUB_REG")],
+          by.x = "id", by.y = "FAOST_CODE")
+
+d3ForceNetwork(Links = data.frame(edge2000),
+               Nodes = node2010,
+               Source = "fromID", Target = "toID",
+               Value = "distance", NodeID = "name",
+               Group = "UNSD_MACRO_REG", zoom = TRUE,
+               opacity = 0.9, fontsize = 15,
+               linkDistance = "function(d){return d.value*000}",
+               width = 1500, height = 1500, charge = -300,
+               file = "network2000.html")
+
+
+
+## Network for 2005
+network2005 = getSubYearNetwork(data.table(fullNetwork), 2/3)
+
+tmp = by(network2005, INDICES = network2005$fromCountry,
+    FUN = function(x) head(x[order(distance, decreasing = FALSE)], 2))
+
+edge2005 = Reduce(function(x, y) rbind(x, y), tmp)
+
+## edge2005 = network2005[distance < 0.8 & distance > 0, ]
+node2005 =
+    unique.data.frame(network2005[, list(name = fromCountry,
+                                         id = fromCountryCode)])
+
+node2005 =
+    merge(data.frame(node2005),
+          FAOregionProfile[, c("FAOST_CODE", "UNSD_MACRO_REG",
+                               "UNSD_SUB_REG")],
+          by.x = "id", by.y = "FAOST_CODE")
+
+
+
+d3ForceNetwork(Links = data.frame(edge2005),
+               Nodes = node2010,
+               Source = "fromID", Target = "toID",
+               Value = "distance", NodeID = "name",
+               Group = "UNSD_MACRO_REG", zoom = TRUE,
+               opacity = 0.9, fontsize = 15,
+               linkDistance = "function(d){return d.value*000}",
+               width = 1500, height = 1500, charge = -300,
+               file = "network2005.html")
+
+
 
 library(d3Network)
 library(classInt)
 test = dist.lst[[1248]][-1, list(from, to, distance)]
 hist(test$distance, breaks = 100)
-plot(classIntervals(test$distance, n=5, style="kmeans"), pal = pal1, main = "K-means")
+plot(classIntervals(test$distance, n=5, style="kmeans"),
+     pal = pal1, main = "K-means")
 
-plot(classIntervals(test$distance, n=7, style="bclust"), pal = pal1, main = "b-clust")
+plot(classIntervals(test$distance, n=7, style="bclust"),
+     pal = pal1, main = "b-clust")
 
 clust = classIntervals(test$distance, n=7, style="bclust")
 attr(clust, "parameters")$cluster
@@ -79,7 +249,8 @@ table2hierachy = function(table){
         print(i)
         tmp[[i]]$name = paste0("class_", unique(splited[[i]]$class))
 
-        tmp2 = lapply(split(splited[[i]], splited[[i]]$to), FUN = function(x) list(name = x$to, size = x$distance))
+        tmp2 = lapply(split(splited[[i]], splited[[i]]$to),
+            FUN = function(x) list(name = x$to, size = x$distance))
         names(tmp2) = NULL
         tmp[[i]]$children =tmp2
     }
