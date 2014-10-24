@@ -6,6 +6,7 @@ define(['jquery',
 
     'use strict';
 
+
     function PRE_CORE() {
 
         this.CONFIG = {
@@ -15,6 +16,11 @@ define(['jquery',
 
     }
 
+    /**
+     * This is the entry method to configure the module.
+     *
+     * @param config Custom configuration in JSON format to extend the default settings.
+     */
     PRE_CORE.prototype.init = function(config) {
 
         /* Extend default configuration. */
