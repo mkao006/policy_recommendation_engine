@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<body> 
+
 <style>
 .link {
 stroke: #666;
@@ -849,4 +847,3 @@ d3.select(this).select("circle").transition()
 }
 
 </script>
-</body>
