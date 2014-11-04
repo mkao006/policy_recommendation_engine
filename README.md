@@ -42,6 +42,10 @@ successful policies.
   poor and well with respect to countries which has achieved zero
   hunger.
 
+* Recommendation page which identifies countries of similar profile
+  and also overview of countries commitment and action towards
+  eradicating hunger. (Research from SOFI and other paper).
+
 
 Deadline: 10th of December
 
