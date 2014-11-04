@@ -58,6 +58,8 @@ Deadline: 10th of December
 * A document harvestor and repository to harveset policy paper from
   other policy data bases and governmental websites.
 
+* Integration of the policy database to the recommendation engine page.
+
 Deadline: 1st of June
 
 ### Phase (3) 
