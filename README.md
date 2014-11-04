@@ -31,3 +31,33 @@ successful policies.
 ## How does the engine work
 
 
+## Project Timeline
+
+### Phase (1)
+
+* A global network portraying the curret state of the food insecurity
+  in order to identify the current position of the country.
+
+* A panel which identify dimensions in which countries are performing
+  poor and well with respect to countries which has achieved zero
+  hunger.
+
+
+Deadline: 10th of December
+
+### Phase (2)
+
+* A log-in mechanism in order to record information of the user, location, affiliation etc.
+
+* A data base in which relevant research working paper and policies can be uploaded and saved.
+
+* A document harvestor and repository to harveset policy paper from
+  other policy data bases and governmental websites.
+
+Deadline: 1st of June
+
+### Phase (3) 
+
+* Promotion of the engine to FAO and countries of interest.
+
+* Integration of crowd voting mechanism for identification of successful policies.
