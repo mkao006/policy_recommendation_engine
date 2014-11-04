@@ -60,6 +60,8 @@ Deadline: 10th of December
 
 * Integration of the policy database to the recommendation engine page.
 
+* A designer to design the home page.
+
 Deadline: 1st of June
 
 ### Phase (3) 
