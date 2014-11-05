@@ -46,6 +46,15 @@ successful policies.
   and also overview of countries commitment and action towards
   eradicating hunger. (Research from SOFI and other paper).
 
+* Initial setup of the featured project page with a draft of the "food
+  reach" project.
+
+
+Deliverable:
+
+1. Home page depicting the state network
+2. Recommendation with country overview
+3. Featured analysis page with Food reach project.
 
 Deadline: 10th of December
 
