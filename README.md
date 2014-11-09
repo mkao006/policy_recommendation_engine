@@ -16,7 +16,7 @@ accepted threshold of 5%.
 Hunger as we know it, is a complex issue. Ranging from the
 availability of production and acceesibility by both physical and
 monetary means, to the utilization of resources and
-vulnerability. Yet, this is not the only problem countries face and
+vulnerability. Yet, often this is not the only problem countries face;
 thus agencies working towards eradicating hunger often face contraints
 in budget and resources to achieve its goal. In particular, skilled
 statistician and policy analysts are in high demand to provide support
@@ -24,8 +24,9 @@ to decision making.
 
 The goal of this recommendation engine is to bring together the data
 and policies to identify key shortage in order to eradicate hunger and
-also recommend appropriate policies based on the similar of other
-successful policies.
+also recommend appropriate policies based on similar established
+policies and practices.
+
 
 ## What gap does the engine fill in?
 
@@ -33,12 +34,14 @@ successful policies.
 
 The first problem encountered by countries when dealing with data is
 the presense of missing values. Often adhoc and statistically unsound
-imputation methodology were used to fill in the missing values.
+imputation methodology were used to fill in the missing values. The
+use of invalid imputatino procedures can and often result in
+undesirable result such as self-fulfilling and invalid inference.
 
-The missing values in the engine are imputed using the Amelia 2
-package which multiplicatively impute the data several times in order
-for sound valid statistical inference. The engine provides well tuned
-parameters and priors for the best result.
+The missing values in the engine are imputed using the Amelia II
+package with well tuned parameters and priors for the best result. The
+data is also multiplicatively impute several times in order for sound
+valid statistical inference. 
 
 ### Multivariate analysis:
 
@@ -49,11 +52,11 @@ focus of resources and energies in the most burning areas, the engine
 will identify the key areas which the countries may focus and result
 in improvements in the situation of the country.
 
-To know where to go, you need to know where you are and where the rest
-of the world are. The engine uses multivaraite analysis such as
-nearest neighbourgh to locate countries which faced similar situations
-in order for analyst and policy makers to decide how they would tackle
-the problem
+To know where to go, you need to know where you are and where the
+remaining of the world rests. The engine uses multivaraite analysis
+such as nearest neighbourgh to locate countries which faced similar
+situations in order for analyst and policy makers to decide how they
+would tackle the problem
 
 ### Recommendation:
 
@@ -63,7 +66,6 @@ has deemed to be successful in the past for potential starting point
 for the country.
 
 ## How does the engine work
-
 
 
 ## Project Timeline
