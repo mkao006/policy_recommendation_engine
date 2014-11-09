@@ -68,6 +68,24 @@ for the country.
 ## How does the engine work
 
 
+## How can you contribute?
+
+There are multiple ways to contribute.
+
+### Analysts
+You can help us to improve our recommendations, and areas in which we have failed to consider.
+
+### Programmers 
+You can help us to make the interface more efficient and user friendly
+
+### Geeks
+Compete like Kaggle and make the recommendation engine better
+
+
+## How much does it cost?
+
+Free, everything is free but donations are most welcome.
+
 ## Project Timeline
 
 ### Phase (1)
