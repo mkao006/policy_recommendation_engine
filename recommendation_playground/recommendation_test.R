@@ -1,8 +1,9 @@
 library(data.table)
 library(igraph)
+library(reshape2)
 
+sapply(dir("./codes/", pattern = ".R", full.names = TRUE), source)
 load("../data/imputed.RData")
-
 
 imputed.dt = na.omit(imputed.dt)
 excludeCountry = c("Greenland", "United States Virgin Islands",
@@ -22,8 +23,8 @@ zeroHunger.dt[, c(setdiff(colnames(imputed.dt),
                           colnames(zeroHunger.dt))) := NA]
 imputed.dt = rbind(imputed.dt, zeroHunger.dt)
 
-## Should change this to rank
-imputed.dt[, `:=`(colnames(imputed.dt)[variableIndex],
+scaledVariable = paste0("SCALED.", colnames(imputed.dt)[variableIndex])
+imputed.dt[, `:=`(scaledVariable,
                   lapply(imputed.dt[,
                                     colnames(imputed.dt)[variableIndex],
                                     with = FALSE],
@@ -36,20 +37,6 @@ imputed.dt[, `:=`(colnames(imputed.dt)[variableIndex],
                              scaled
                          }))]
 
-calculateDist = function(index, data, statistics){
-    data[, statistics, with = FALSE] -
-        data[index, statistic, with = FALSE]
-}
-
-dist2index = function(data, names, index){
-    all = lapply(names,
-        FUN = function(x) unlist(data[, x, with = FALSE]))
-    one = lapply(names,
-        FUN = function(x) unlist(data[index, x, with = FALSE]))
-    rowSums(mapply(x = all, FUN = function(x, y) abs(x - y), y = one),
-            na.rm = TRUE)
-}
-
 
 dist.lst =
     lapply(1:NROW(imputed.dt),
@@ -57,7 +44,7 @@ dist.lst =
                print(x)
                dist =
                    dist2index(imputed.dt,
-                              colnames(imputed.dt)[variableIndex], x)
+                              scaledVariable, x)
                fromCountry = imputed.dt[x, FAO_TABLE_NAME]
                fromCountryCode = imputed.dt[x, FAOST_CODE]
                toCountry = imputed.dt[, FAO_TABLE_NAME]
@@ -91,26 +78,11 @@ fullNetwork = merge(fullNetwork, node.dt, by = "fromCountry")
 setnames(node.dt, c("fromCountry", "fromID"), c("toCountry", "toID"))
 fullNetwork = merge(fullNetwork, node.dt, by = "toCountry")
 
-write.csv(fullNetwork, file = "../data/fullNetwork.csv",
-          row.names = FALSE)
-write.csv(imputed.dt, file = "../data/imputed.csv",
-          row.names = FALSE)
-fullNetwork = read.csv(file = "../data/fullNetwork.csv")
-
-## library(RPostgreSQL)
-## drv = dbDriver("PostgreSQL")
-## con = dbConnect(drv, user = "mk", dbname = "fullNetwork")
-## dbExistsTable(con, "full_network")
-## dbWriteTable(con, name = "full_network", value = fullNetwork,
-##              overwrite = TRUE)
-## dbGetQuery(con, 'SELECT * FROM full_network LIMIT 10')
-
-
-
-getSubYearNetwork = function(network, year){
-    network[fromYear == year & toYear == year &
-            fromCountry != toCountry, ]
-}
+## write.csv(fullNetwork, file = "../data/fullNetwork.csv",
+##           row.names = FALSE)
+## write.csv(imputed.dt, file = "../data/imputed.csv",
+##           row.names = FALSE)
+## fullNetwork = read.csv(file = "../data/fullNetwork.csv")
 
 library(data.table)
 network2010 = getSubYearNetwork(data.table(fullNetwork), 1)
@@ -120,7 +92,6 @@ tmp = by(network2010, INDICES = network2010$fromCountry,
 
 edge2010 = Reduce(function(x, y) rbind(x, y), tmp)
 edge2010 = edge2010[toCountryCode != 0, ]
-## edge2010 = network2010[distance < 0.8 & distance > 0, ]
 
 node2010 =
     unique.data.frame(network2010[, list(name = fromCountry,
@@ -146,7 +117,35 @@ d3ForceNetwork(Links = data.frame(edge2010),
                opacity = 0.9, fontsize = 15,
                linkDistance = "function(d){return d.value}",
                width = 1500, height = 1500, charge = -300,
-               file = "network2010.html", d3Script = "d3.v3.min.js")
+               file = "../network2010.html")
+
+check = network2010[fromCountryCode == 0, ]
+
+## Add in the food price from Numero in accessability.
+##
+## Add in number of super market based on food dessert for
+## accessability.
+##
+## Take countries which has less than 5 percent POU and use it as the
+## benchmark. For other dimensions, take the top 10 percent which is
+## about 20 countries.
+##
+## The distance to hunger should be mapped as an spiral!
+fromGoal.dt =
+    network2010[fromCountryCode == 0, list(source = toID,
+                    target = fromID, value = 2 * rank(distance))][order(source)]
+d3ForceNetwork(Links = data.frame(fromGoal.dt),
+               Nodes = node2010,
+               Target = "target", Source = "source",               
+               Value = "value", NodeID = "name",
+               Group = "UNSD_MACRO_REG", zoom = TRUE,
+               opacity = 0.9, fontsize = 15,
+               linkDistance = "function(d){return d.value}",
+               linkWidth = 1,
+               width = 1000, height = 1000, charge = -50,
+               file = "distanceFromGoal.html",
+               d3Script = "d3.v3.min.js")
+
 
 ## Need to check how undernourishment of <5 is determined, I think
 ## it's based on development.
@@ -440,3 +439,30 @@ graphics.off()
 
 ## (3) Function to illustrate the change of the neighbouring country
 ## in the 4 dimensions.
+
+
+## Interface:
+
+## Home page:
+##
+## With the recommendation engine network and also an input box to
+## identify countries of selection. Also enlarge the goal of zero
+## hunger.
+##
+## Show that the current world status and also the network when
+## equality of food is achieved.
+##
+## After selecting the ccountry, the engine wil lidentify areas which
+## the country is performing well and performing poorly.
+##
+## Specific area recommendation: Then the policy analyst can select
+## which area they would like to improve and the engine will recommend
+## the relevant policy.
+##
+## General recommendation: The engine can also make general
+## recommendation by identify countries of similar situation in the
+## past which has policies that has been implemented and may be used
+## to form country specific polilcies.
+
+## Step one by November is to have an engine with interface which
+## identify key area of needs.
