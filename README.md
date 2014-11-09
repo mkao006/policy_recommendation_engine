@@ -4,17 +4,17 @@
 ## About this project
 
 This is the repository for the policy recommendation engine. The aim
-is to assist countries lacking statistical and policy capacity to
-identify and analyse policies available that may help.
+is to assist countries lacking statistical and analytical capacity to
+identify policies and areas which are in most need.
 
 ## Why do we need this engine
 
 There are 210 countries and territories in the world, of which at
 least a third of countries has an undernourishment greater than the
-accepted threshold of 5\%.
+accepted threshold of 5%.
 
 Hunger as we know it, is a complex issue. Ranging from the
-availability of produciton and acceesibility by both physical and
+availability of production and acceesibility by both physical and
 monetary means, to the utilization of resources and
 vulnerability. Yet, this is not the only problem countries face and
 thus agencies working towards eradicating hunger often face contraints
@@ -27,15 +27,50 @@ and policies to identify key shortage in order to eradicate hunger and
 also recommend appropriate policies based on the similar of other
 successful policies.
 
+## What gap does the engine fill in?
+
+### Imputation:
+
+The first problem encountered by countries when dealing with data is
+the presense of missing values. Often adhoc and statistically unsound
+imputation methodology were used to fill in the missing values.
+
+The missing values in the engine are imputed using the Amelia 2
+package which multiplicatively impute the data several times in order
+for sound valid statistical inference. The engine provides well tuned
+parameters and priors for the best result.
+
+### Multivariate analysis:
+
+As stated above, hunger is a complex issue involving
+multi-disciplinary knowledge. The complex problem involves tens and
+maybe hundreds of indicators to be analyzed. Solving problem requires
+focus of resources and energies in the most burning areas, the engine
+will identify the key areas which the countries may focus and result
+in improvements in the situation of the country.
+
+To know where to go, you need to know where you are and where the rest
+of the world are. The engine uses multivaraite analysis such as
+nearest neighbourgh to locate countries which faced similar situations
+in order for analyst and policy makers to decide how they would tackle
+the problem
+
+### Recommendation:
+
+Knowing where you are is the first step, the next is where to go. The
+key component of the engine is to identify policies and efforts which
+has deemed to be successful in the past for potential starting point
+for the country.
 
 ## How does the engine work
+
 
 
 ## Project Timeline
 
 ### Phase (1)
 
-* A global network portraying the curret state of the food insecurity
+* A global network portraying the current state of the food insecurity
   in order to identify the current position of the country.
 
 * A panel which identify dimensions in which countries are performing
@@ -52,7 +87,7 @@ successful policies.
 
 Deliverable:
 
-1. Home page depicting the state network
+1. Home page depicting the state network and performance.
 2. Recommendation with country overview
 3. Featured analysis page with Food reach project.
 
