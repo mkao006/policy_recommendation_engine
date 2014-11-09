@@ -78,7 +78,7 @@ You can help us to improve our recommendations, and areas in which we have faile
 ### Programmers 
 You can help us to make the interface more efficient and user friendly
 
-### Geeks
+### Kaggle competitors
 Compete like Kaggle and make the recommendation engine better
 
 
